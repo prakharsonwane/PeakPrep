@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard | PeakPrep</title>
+
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: #121b30;
+      --text: #f2f5ff;
+      --muted: #a4afc7;
+      --line: #263550;
+      --blue: #80aaff;
+      --mint: #68dfbd;
+      --purple: #b5a0ff;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: radial-gradient(ellipse at top left, #17274b 0, #0b1020 48%);
+      color: var(--text);
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
+      line-height: 1.55;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px max(4%, calc((100% - 1180px) / 2));
+      border-bottom: 1px solid var(--line);
+      background: rgba(11, 16, 32, .92);
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      backdrop-filter: blur(12px);
+    }
+
+    .logo {
+      font-size: 25px;
+      font-weight: 850;
+      letter-spacing: -.8px;
+    }
+
+    .logo span { color: var(--blue); }
+
+    .user-area {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .user-area form { margin: 0; }
+
+    .logout {
+      border: 1px solid #3a4967;
+      border-radius: 10px;
+      background: transparent;
+      color: var(--text);
+      padding: 9px 13px;
+      cursor: pointer;
+    }
+
+    .logout:hover { background: #1b2941; }
+
+    main {
+      width: min(1180px, 92%);
+      margin: 0 auto;
+      padding: 36px 0 60px;
+    }
+
+    .hero {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 24px;
+      padding: 30px;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: linear-gradient(120deg, #172849, #121b30 75%);
+      margin-bottom: 32px;
+    }
+
+    .eyebrow {
+      font-size: 12px;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      font-weight: 800;
+      color: var(--blue);
+      margin: 0 0 8px;
+    }
+
+    .hero h1 {
+      font-size: clamp(27px, 4vw, 40px);
+      letter-spacing: -1px;
+      margin: 0 0 8px;
+    }
+
+    .hero p:not(.eyebrow) {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .hero-icon { font-size: 54px; }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 12px;
+      margin: 32px 0 16px;
+    }
+
+    .section-head h2 {
+      font-size: 22px;
+      margin: 0;
+    }
+
+    .section-head p {
+      margin: 3px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .exam-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .exam-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 23px;
+      min-width: 0;
+    }
+
+    .exam-card.advanced {
+      background: linear-gradient(145deg, #1d1d43, #121b30 75%);
+    }
+
+    .exam-top {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      margin-bottom: 17px;
+    }
+
+    .exam-icon {
+      display: grid;
+      place-items: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: #20385f;
+      color: var(--blue);
+      font-size: 20px;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    .advanced .exam-icon {
+      background: #34305c;
+      color: var(--purple);
+    }
+
+    .exam-top h3 { margin: 0; font-size: 20px; }
+
+    .exam-top p {
+      margin: 3px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 19px;
+    }
+
+    .stats span {
+      background: #1b2941;
+      border: 1px solid #2b3b58;
+      border-radius: 8px;
+      padding: 5px 9px;
+      color: #c6d2e9;
+      font-size: 12px;
+    }
+
+    .advanced .stats span {
+      background: #242344;
+      border-color: #38345e;
+    }
+
+    .test-label {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 800;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+    }
+
+    .test-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 9px;
+    }
+
+    .test-link {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      min-height: 66px;
+      padding: 10px 3px;
+      border: 1px solid #334565;
+      border-radius: 12px;
+      background: #17243c;
+      transition: transform .16s, border-color .16s, background .16s;
+    }
+
+    .test-link:hover {
+      transform: translateY(-3px);
+      border-color: var(--blue);
+      background: #20365a;
+    }
+
+    .advanced .test-link {
+      background: #201f3c;
+      border-color: #3c385f;
+    }
+
+    .advanced .test-link:hover {
+      border-color: var(--purple);
+      background: #302b55;
+    }
+
+    .test-link strong { font-size: 19px; }
+
+    .test-link small {
+      font-size: 10px;
+      color: var(--muted);
+    }
+
+    .advanced .test-link small { color: #c1b9e7; }
+
+    .history {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      overflow: hidden;
+      background: var(--panel);
+    }
+
+    .history-row {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      align-items: center;
+      gap: 18px;
+      padding: 15px 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .history-row:last-child { border-bottom: 0; }
+
+    .history-row strong {
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .history-row small { color: var(--muted); }
+
+    .score {
+      font-weight: 800;
+      color: var(--mint);
+      white-space: nowrap;
+    }
+
+    .empty {
+      padding: 30px;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    footer {
+      text-align: center;
+      color: #71809d;
+      font-size: 12px;
+      padding: 20px;
+    }
+
+    @media (max-width: 720px) {
+      .exam-grid { grid-template-columns: 1fr; }
+      .hero { padding: 22px; }
+      .hero-icon { font-size: 38px; }
+
+      .history-row {
+        grid-template-columns: 1fr auto;
+        gap: 8px;
+      }
+
+      .history-row .date {
+        grid-column: 1 / -1;
+        grid-row: 2;
+      }
+
+      .user-area span { display: none; }
+    }
+
+    @media (max-width: 420px) {
+      .test-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .hero { align-items: flex-start; }
+      .exam-card { padding: 17px; }
+      main { width: 94%; }
+    }
+  </style>
+</head>
+
+<body>
+<header class="topbar">
+  <a class="logo" href="{{ url_for('dashboard') }}">PeakPrep<span>.</span></a>
+
+  <div class="user-area">
+    <span>Welcome, {{ current_user.username }}</span>
+
+    <form action="{{ url_for('logout') }}" method="post">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <button class="logout" type="submit">Log out ↗</button>
+    </form>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div>
+      <p class="eyebrow">Your preparation space</p>
+      <h1>Ready to beat your best? 👋</h1>
+      <p>Choose your exam, select the exact test number, and start practising.</p>
+    </div>
+    <div class="hero-icon" aria-hidden="true">🎯</div>
+  </section>
+
+  <div class="section-head">
+    <div>
+      <h2>Choose Your Mock Test</h2>
+      <p>Tap any test number to start that paper.</p>
+    </div>
+  </div>
+
+  <section class="exam-grid">
+    <article class="exam-card">
+      <div class="exam-top">
+        <div class="exam-icon">M</div>
+        <div>
+          <h3>JEE Main</h3>
+          <p>Full-length PCM practice</p>
+        </div>
+      </div>
+
+      <div class="stats">
+        <span>{{ main_tests|length }} available tests</span>
+        <span>75 questions</span>
+        <span>180 minutes</span>
+      </div>
+
+      <div class="test-label">SELECT TEST NUMBER</div>
+
+      <div class="test-grid">
+        {% for test_no in main_tests.keys()|sort %}
+          <a
+            class="test-link"
+            href="{{ url_for('mock_test', exam='main', set_no=test_no) }}"
+            aria-label="Start JEE Main Test {{ test_no }}"
+          >
+            <strong>{{ test_no }}</strong>
+            <small>TEST</small>
+          </a>
+        {% else %}
+          <p>No JEE Main tests have been added yet.</p>
+        {% endfor %}
+      </div>
+    </article>
+
+    <article class="exam-card advanced">
+      <div class="exam-top">
+        <div class="exam-icon">A</div>
+        <div>
+          <h3>JEE Advanced</h3>
+          <p>Challenge your concepts</p>
+        </div>
+      </div>
+
+      <div class="stats">
+        <span>{{ advanced_tests|length }} available tests</span>
+        <span>54 questions</span>
+        <span>180 minutes</span>
+      </div>
+
+      <div class="test-label">SELECT TEST NUMBER</div>
+
+      <div class="test-grid">
+        {% for test_no in advanced_tests.keys()|sort %}
+          <a
+            class="test-link"
+            href="{{ url_for('mock_test', exam='advanced', set_no=test_no) }}"
+            aria-label="Start JEE Advanced Test {{ test_no }}"
+          >
+            <strong>{{ test_no }}</strong>
+            <small>TEST</small>
+          </a>
+        {% else %}
+          <p>No JEE Advanced tests have been added yet.</p>
+        {% endfor %}
+      </div>
+    </article>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <div>
+        <h2>Your Previous Results</h2>
+        <p>Review your recent mock-test attempts.</p>
+      </div>
+    </div>
+
+    <div class="history">
+      {% if recent_results %}
+        {% for result in recent_results %}
+          <div class="history-row">
+            <div>
+              <strong>
+                {{ result.title or (result.exam ~ ' Test ' ~ result.set_no) }}
+              </strong>
+              <small>
+                {{ result.correct }} correct ·
+                {{ result.wrong }} wrong ·
+                {{ result.unanswered }} unanswered
+              </small>
+            </div>
+
+            <div class="score">
+              {{ result.score }} / {{ result.max_score }}
+            </div>
+
+            <small class="date">
+              {{ result.date_label }}
+            </small>
+          </div>
+        {% endfor %}
+      {% else %}
+        <div class="empty">
+          <div style="font-size:32px;margin-bottom:8px">📈</div>
+          <strong>No results yet</strong>
+          <br>
+          Complete a mock test and your score will appear here.
+        </div>
+      {% endif %}
+    </div>
+  </section>
+</main>
+
+<footer>© 2026 PeakPrep · Keep learning, keep improving.</footer>
+</body>
+</html>

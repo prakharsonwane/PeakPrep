@@ -1,0 +1,339 @@
+ 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Result | PeakPrep</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #f4efff, #edfff7);
+            color: #29243c;
+            min-height: 100vh;
+        }
+
+        header {
+            padding: 20px 7%;
+            background: #fff;
+            border-bottom: 1px solid #e9e2f5;
+        }
+
+        .logo {
+            color: #8060d4;
+            font-size: 25px;
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        main {
+            max-width: 900px;
+            margin: 35px auto;
+            padding: 0 20px 40px;
+        }
+
+        .result-card {
+            padding: 32px;
+            background: white;
+            border: 1px solid #e8e0f5;
+            border-radius: 22px;
+            box-shadow: 0 12px 35px rgba(69, 47, 110, 0.08);
+        }
+
+        .heading {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .success-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 68px;
+            height: 68px;
+            margin: 0 auto 18px;
+            border-radius: 22px;
+            background: #def8ec;
+            color: #218363;
+            font-size: 32px;
+        }
+
+        .heading h1 {
+            font-size: clamp(25px, 4vw, 34px);
+            margin-bottom: 10px;
+        }
+
+        .heading p {
+            color: #777287;
+            line-height: 1.6;
+        }
+
+        .score-panel {
+            text-align: center;
+            padding: 26px 18px;
+            border-radius: 17px;
+            background: linear-gradient(135deg, #f0eaff, #e9fff5);
+            margin-bottom: 25px;
+        }
+
+        .score-label {
+            font-size: 14px;
+            color: #6e647f;
+            margin-bottom: 10px;
+        }
+
+        .score {
+            font-size: clamp(38px, 8vw, 56px);
+            color: #7652c8;
+            font-weight: 800;
+            overflow-wrap: anywhere;
+        }
+
+        .score-caption {
+            color: #777287;
+            font-size: 13px;
+            margin-top: 8px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat {
+            padding: 20px;
+            border: 1px solid #eee8f6;
+            border-radius: 14px;
+            background: #fff;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: #777287;
+            margin-bottom: 10px;
+        }
+
+        .stat-value {
+            font-size: 27px;
+            font-weight: bold;
+        }
+
+        .green {
+            color: #208463;
+        }
+
+        .red {
+            color: #c4515e;
+        }
+
+        .purple {
+            color: #8060d4;
+        }
+
+        .section-title {
+            font-size: 20px;
+            margin-bottom: 14px;
+        }
+
+        .feedback {
+            padding: 18px;
+            background: #f8f6fc;
+            border-radius: 13px;
+            margin-bottom: 25px;
+            line-height: 1.7;
+        }
+
+        .feedback h3 {
+            margin-bottom: 7px;
+            font-size: 17px;
+        }
+
+        .feedback p {
+            color: #716a81;
+            font-size: 14px;
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .btn {
+            flex: 1;
+            min-width: 180px;
+            display: inline-block;
+            text-align: center;
+            padding: 14px 18px;
+            border-radius: 11px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background 0.2s ease;
+        }
+
+        .btn-primary {
+            background: #8060d4;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #6e4dc1;
+        }
+
+        .btn-secondary {
+            background: #e5f8ef;
+            color: #24775b;
+        }
+
+        .btn-secondary:hover {
+            background: #d5f2e4;
+        }
+
+        .note {
+            margin-top: 20px;
+            color: #8a8499;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 500px) {
+            main {
+                margin-top: 20px;
+                padding: 0 13px 28px;
+            }
+
+            .result-card {
+                padding: 22px 16px;
+            }
+
+            .stats-grid {
+                gap: 10px;
+            }
+
+            .stat {
+                padding: 15px;
+            }
+
+            .stat-value {
+                font-size: 23px;
+            }
+
+            .btn {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <a href="{{ url_for('home') }}" class="logo">PeakPrep</a>
+    </header>
+
+    <main>
+        <section class="result-card">
+
+            <div class="heading">
+                <div class="success-icon">✓</div>
+
+                <h1>Test Completed!</h1>
+
+                <p>
+                    Great effort, {{ current_user.username }}.
+                    Here's your mock test performance.
+                </p>
+            </div>
+
+            <div class="score-panel">
+                <p class="score-label">Your Final Score</p>
+
+                <div class="score">
+                    {{ result.score }}
+                </div>
+
+                <p class="score-caption">
+                    out of {{ result.max_score }} marks
+                </p>
+            </div>
+
+            <h2 class="section-title">Performance Summary</h2>
+
+            <div class="stats-grid">
+
+                <div class="stat">
+                    <p class="stat-label">Correct Answers</p>
+                    <p class="stat-value green">
+                        {{ result.correct }}
+                    </p>
+                </div>
+
+                <div class="stat">
+                    <p class="stat-label">Incorrect Answers</p>
+                    <p class="stat-value red">
+                        {{ result.wrong }}
+                    </p>
+                </div>
+
+                <div class="stat">
+                    <p class="stat-label">Unanswered</p>
+                    <p class="stat-value purple">
+                        {{ result.unanswered }}
+                    </p>
+                </div>
+
+                <div class="stat">
+                    <p class="stat-label">Accuracy</p>
+                    <p class="stat-value purple">
+                        {{ ((result.correct / result.total) * 100)|round(1) if result.total else 0 }}%
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="feedback">
+                <h3>Your Next Step</h3>
+
+                <p>
+                    Review the questions you found difficult.
+                    Strengthen your concepts and practise regularly
+                    to improve your next score.
+                </p>
+            </div>
+
+            <div class="actions">
+
+                <a
+                    href="{{ url_for('dashboard') }}"
+                    class="btn btn-primary"
+                >
+                    Back to Dashboard
+                </a>
+
+                <a
+                    href="{{ url_for('mock_test', exam=result.exam|lower, set_no=result.set_no) }}"
+                    class="btn btn-secondary"
+                >
+                    Try Again
+                </a>
+
+            </div>
+
+            <p class="note">
+                Your score and statistics are calculated by the
+                PeakPrep server using your submitted answers.
+            </p>
+
+        </section>
+    </main>
+</body>
+</html>

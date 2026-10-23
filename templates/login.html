@@ -1,0 +1,549 @@
+<!DOCTYPE html><html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f8f6ff">
+    <title>Login | PeakPrep</title><style>
+    :root {
+        --purple: #8060d8;
+        --purple-dark: #6846c5;
+        --lavender: #f1edff;
+        --mint: #dff8ed;
+        --text: #29253b;
+        --muted: #77748b;
+        --border: #e7e2f3;
+        --white: #fff;
+    }
+
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        font-family: "Segoe UI", Arial, sans-serif;
+        color: var(--text);
+        background:
+            radial-gradient(ellipse at 0% 0%, #eae2ff, transparent 42%),
+            radial-gradient(ellipse at 100% 100%, #dff8ed, transparent 38%),
+            #fcfbff;
+    }
+
+    a {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .navbar {
+        width: min(1120px, 90%);
+        min-height: 78px;
+        margin: auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+    }
+
+    .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 23px;
+        font-weight: 850;
+        letter-spacing: -1px;
+    }
+
+    .brand-icon {
+        display: grid;
+        place-items: center;
+        width: 42px;
+        height: 42px;
+        border-radius: 14px;
+        background: linear-gradient(135deg, #a78bfa, #8060d8);
+        color: white;
+    }
+
+    .brand-name span {
+        color: var(--purple);
+    }
+
+    .home-link {
+        color: var(--muted);
+        font-size: 14px;
+        font-weight: 650;
+    }
+
+    .home-link:hover,
+    .bottom-link:hover {
+        color: var(--purple-dark);
+    }
+
+    main {
+        flex: 1;
+        display: grid;
+        place-items: center;
+        padding: 35px 18px 55px;
+    }
+
+    .login-layout {
+        width: min(930px, 100%);
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        align-items: stretch;
+        overflow: hidden;
+        border: 1px solid #e9e3f5;
+        border-radius: 28px;
+        background: var(--white);
+        box-shadow: 0 25px 75px rgba(73, 52, 125, .12);
+    }
+
+    .welcome-panel {
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 42px;
+        background: linear-gradient(145deg, #eee7ff, #e0f8ed);
+    }
+
+    .welcome-panel::after {
+        content: "";
+        position: absolute;
+        width: 220px;
+        height: 220px;
+        right: -100px;
+        bottom: -100px;
+        border-radius: 50%;
+        border: 35px solid #ffffff70;
+    }
+
+    .welcome-badge {
+        width: fit-content;
+        margin-bottom: 24px;
+        padding: 8px 13px;
+        border: 1px solid #ffffffbd;
+        border-radius: 30px;
+        background: #ffffff91;
+        color: #6e53c0;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: .8px;
+        text-transform: uppercase;
+    }
+
+    .welcome-panel h1 {
+        margin-bottom: 17px;
+        font-size: clamp(32px, 4vw, 43px);
+        line-height: 1.14;
+        letter-spacing: -1.6px;
+    }
+
+    .welcome-panel h1 span {
+        color: var(--purple-dark);
+    }
+
+    .welcome-description {
+        max-width: 350px;
+        color: #6e6a82;
+        font-size: 14px;
+        line-height: 1.9;
+    }
+
+    .welcome-points {
+        display: grid;
+        gap: 15px;
+        margin-top: 32px;
+    }
+
+    .welcome-point {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        color: #4f4b66;
+        font-size: 13px;
+        font-weight: 650;
+    }
+
+    .check {
+        display: grid;
+        place-items: center;
+        flex-shrink: 0;
+        width: 27px;
+        height: 27px;
+        border-radius: 9px;
+        background: #ffffffc9;
+        color: #27795e;
+        font-weight: 900;
+    }
+
+    .form-panel {
+        padding: 42px;
+    }
+
+    .form-label-top {
+        color: var(--purple-dark);
+        font-size: 11px;
+        font-weight: 850;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+    }
+
+    .form-panel h2 {
+        margin-top: 10px;
+        font-size: 31px;
+        letter-spacing: -1px;
+    }
+
+    .form-subtitle {
+        margin-top: 8px;
+        margin-bottom: 27px;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.7;
+    }
+
+    .error-message {
+        margin-bottom: 18px;
+        padding: 12px 14px;
+        border: 1px solid #f3c7c7;
+        border-radius: 12px;
+        background: #fff1f1;
+        color: #a33232;
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+    .field {
+        margin-bottom: 19px;
+    }
+
+    .field label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 13px;
+        font-weight: 750;
+    }
+
+    .input-wrap {
+        position: relative;
+    }
+
+    .input-icon {
+        position: absolute;
+        top: 50%;
+        left: 14px;
+        transform: translateY(-50%);
+        color: #8d85a6;
+        font-size: 16px;
+        pointer-events: none;
+    }
+
+    .field input {
+        width: 100%;
+        min-height: 49px;
+        padding: 12px 14px 12px 42px;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        outline: none;
+        background: #fdfcff;
+        color: var(--text);
+        font: inherit;
+        font-size: 14px;
+        transition: border-color .2s, box-shadow .2s;
+    }
+
+    .field input:focus {
+        border-color: #a78bfa;
+        box-shadow: 0 0 0 4px #a78bfa22;
+    }
+
+    .field input::placeholder {
+        color: #aaa5ba;
+    }
+
+    .password-options {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        margin: -3px 0 22px;
+    }
+
+    .remember {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        color: var(--muted);
+        font-size: 12px;
+    }
+
+    .remember input {
+        accent-color: var(--purple);
+    }
+
+    .submit-btn {
+        width: 100%;
+        min-height: 49px;
+        border: none;
+        border-radius: 12px;
+        background: linear-gradient(110deg, #8f70e7, #7654d0);
+        color: white;
+        font-size: 14px;
+        font-weight: 800;
+        cursor: pointer;
+        box-shadow: 0 8px 20px #8060d82a;
+        transition: transform .2s, box-shadow .2s;
+    }
+
+    .submit-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 25px #8060d844;
+    }
+
+    .submit-btn:focus-visible,
+    a:focus-visible {
+        outline: 3px solid #b8f0dc;
+        outline-offset: 3px;
+    }
+
+    .signup-note {
+        margin-top: 23px;
+        text-align: center;
+        color: var(--muted);
+        font-size: 13px;
+    }
+
+    .bottom-link {
+        color: var(--purple-dark);
+        font-weight: 800;
+    }
+
+    .secure-note {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 7px;
+        margin-top: 24px;
+        color: #8a869b;
+        font-size: 11px;
+    }
+
+    footer {
+        padding: 18px;
+        text-align: center;
+        color: var(--muted);
+        font-size: 12px;
+    }
+
+    @media (max-width: 720px) {
+        .login-layout {
+            max-width: 470px;
+            grid-template-columns: 1fr;
+        }
+
+        .welcome-panel {
+            padding: 30px;
+        }
+
+        .welcome-panel h1 {
+            font-size: 34px;
+        }
+
+        .welcome-points {
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin-top: 22px;
+        }
+
+        .form-panel {
+            padding: 30px;
+        }
+    }
+
+    @media (max-width: 400px) {
+        .navbar {
+            min-height: 68px;
+        }
+
+        .brand {
+            font-size: 20px;
+        }
+
+        .brand-icon {
+            width: 36px;
+            height: 36px;
+        }
+
+        .welcome-panel,
+        .form-panel {
+            padding: 23px;
+        }
+
+        .password-options {
+            align-items: flex-start;
+        }
+    }
+</style>
+
+</head><body><header class="navbar">
+    <a href="{{ url_for('home') }}" class="brand">
+        <span class="brand-icon">P</span>
+        <span class="brand-name">Peak<span>Prep</span></span>
+    </a>
+
+    <a href="{{ url_for('home') }}" class="home-link">
+        ← Back to Home
+    </a>
+</header>
+
+
+<main>
+    <div class="login-layout">
+
+        <section class="welcome-panel">
+            <div class="welcome-badge">
+                Welcome back
+            </div>
+
+            <h1>
+                Your goals are<br>
+                <span>worth the effort.</span>
+            </h1>
+
+            <p class="welcome-description">
+                Sign in to continue your JEE preparation.
+                Practise consistently, review your performance
+                and take the next step towards your goals.
+            </p>
+
+            <div class="welcome-points">
+                <div class="welcome-point">
+                    <span class="check">✓</span>
+                    JEE Main and Advanced practice
+                </div>
+
+                <div class="welcome-point">
+                    <span class="check">✓</span>
+                    Timed mock test sessions
+                </div>
+
+                <div class="welcome-point">
+                    <span class="check">✓</span>
+                    Saved results and score history
+                </div>
+            </div>
+        </section>
+
+
+        <section class="form-panel">
+            <div class="form-label-top">Your learning space</div>
+
+            <h2>Sign in</h2>
+
+            <p class="form-subtitle">
+                Enter your account details to access your dashboard.
+            </p>
+
+            {% if error %}
+                <div class="error-message" role="alert">
+                    {{ error }}
+                </div>
+            {% endif %}
+
+            <form method="POST" action="{{ url_for('login') }}">
+
+                <input type="hidden"
+                       name="csrf_token"
+                       value="{{ csrf_token() }}">
+
+                <div class="field">
+                    <label for="identity">Username or email</label>
+
+                    <div class="input-wrap">
+                        <span class="input-icon" aria-hidden="true">✉</span>
+
+                        <input
+                            type="text"
+                            id="identity"
+                            name="identity"
+                            placeholder="Enter username or email"
+                            autocomplete="username"
+                            maxlength="150"
+                            required
+                        >
+                    </div>
+                </div>
+
+
+                <div class="field">
+                    <label for="password">Password</label>
+
+                    <div class="input-wrap">
+                        <span class="input-icon" aria-hidden="true">⌑</span>
+
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            required
+                        >
+                    </div>
+                </div>
+
+
+                <div class="password-options">
+                    <label class="remember">
+                        <input type="checkbox" id="showPassword">
+                        Show password
+                    </label>
+                </div>
+
+
+                <button type="submit" class="submit-btn">
+                    Sign In →
+                </button>
+
+            </form>
+
+
+            <p class="signup-note">
+                New to PeakPrep?
+                <a href="{{ url_for('register') }}"
+                   class="bottom-link">
+                    Create an account
+                </a>
+            </p>
+
+            <div class="secure-note">
+                <span aria-hidden="true">🔒</span>
+                Your password is stored as a secure hash.
+            </div>
+        </section>
+
+    </div>
+</main>
+
+
+<footer>
+    © 2026 PeakPrep · Keep learning, keep improving.
+</footer>
+
+
+<script>
+    const showPassword = document.getElementById("showPassword");
+    const passwordInput = document.getElementById("password");
+
+    showPassword.addEventListener("change", function () {
+        passwordInput.type = this.checked ? "text" : "password";
+    });
+</script>
+
+</body>
+</html>
